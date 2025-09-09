@@ -1,0 +1,77 @@
+Pedro Oliveira;Gripe;2024-03-22 16:45
+Amoxicilina;500mg 8/8h;2024-03-22 16:45
+Ibuprofeno;400mg 6/6h;2024-03-22 16:45
+Xarope;10ml 12/12h;2024-03-22 08:00
+
+Maria Silva;Consulta de rotina;2024-03-20 14:30
+Paracetamol;500mg 8/8h;2024-03-20 14:30
+Vitamina C;1 comprimido dia;2024-03-20 08:00
+
+João Santos;Dor nas costas;2024-03-21 10:15
+Dorflex;1 comprimido 6/6h;2024-03-21 10:15
+Omeprazol;20mg 1x dia;2024-03-21 08:00
+
+Ana Costa;Enxaqueca;2024-03-25 09:00
+Dipirona;1g 6/6h;2024-03-25 09:00
+Sumatriptano;50mg se necessário;2024-03-25 09:00
+
+Carlos Pereira;Hipertensão;2024-03-19 08:00
+Losartana;50mg 1x dia;2024-03-19 08:00
+Hidroclorotiazida;25mg 1x dia;2024-03-19 08:00
+AAS;100mg 1x dia;2024-03-19 08:00
+
+Fernanda Lima;Asma;2024-03-18 15:45
+Salbutamol;2 jatos se necessário;2024-03-18 15:45
+Budesonida;1 inalação 12/12h;2024-03-18 08:00
+
+Ricardo Alves;Diabetes tipo 2;2024-03-22 11:20
+Metformina;850mg 2x dia;2024-03-22 08:00
+Glibenclamida;5mg 1x dia;2024-03-22 11:20
+
+Beatriz Rocha;Infecção urinária;2024-03-23 17:10
+Ciprofloxacino;500mg 12/12h;2024-03-23 17:10
+Ibuprofeno;400mg 8/8h;2024-03-23 17:10
+
+Luiz Ferreira;Alergia;2024-03-24 13:00
+Loratadina;10mg 1x dia;2024-03-24 13:00
+Prednisona;20mg 1x dia;2024-03-24 08:00
+
+Camila Torres;Infecção de garganta;2024-03-26 09:30
+Amoxicilina;500mg 8/8h;2024-03-26 09:30
+Nimesulida;100mg 12/12h;2024-03-26 09:30
+
+Mateus Nunes;Sinusite;2024-03-27 10:45
+Azitromicina;500mg 1x dia;2024-03-27 10:45
+Paracetamol;750mg 8/8h;2024-03-27 10:45
+
+Juliana Melo;Ansiedade;2024-03-28 16:20
+Sertralina;50mg 1x dia;2024-03-28 08:00
+Diazepam;5mg se necessário;2024-03-28 16:20
+
+Rafael Cunha;Colesterol alto;2024-03-29 08:15
+Atorvastatina;20mg 1x dia;2024-03-29 08:15
+
+Sofia Barbosa;Bronquite;2024-03-30 18:00
+Clenil;2 jatos 12/12h;2024-03-30 08:00
+Salbutamol;2 jatos se necessário;2024-03-30 18:00
+
+Eduardo Martins;Fratura no braço;2024-04-01 14:00
+Dipirona;1g 6/6h;2024-04-01 14:00
+Tramadol;50mg 8/8h;2024-04-01 14:00
+Omeprazol;20mg 1x dia;2024-04-01 08:00
+
+Patrícia Gomes;Infecção de pele;2024-04-02 11:30
+Cefalexina;500mg 6/6h;2024-04-02 11:30
+Pomada antibiótica;Aplicar 2x dia;2024-04-02 08:00
+
+André Moreira;Pressão alta;2024-04-03 09:45
+Enalapril;10mg 2x dia;2024-04-03 09:45
+Atenolol;50mg 1x dia;2024-04-03 08:00
+
+Clara Fernandes;Otite;2024-04-04 17:15
+Amoxicilina;500mg 8/8h;2024-04-04 17:15
+Dipirona;500mg 8/8h;2024-04-04 17:15
+
+Larissa Ribeiro;Gastrite;2024-04-06 12:00
+Omeprazol;20mg 1x dia;2024-04-06 08:00
+Hidróxido de alumínio;10ml se necessário;2024-04-06 12:00

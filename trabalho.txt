@@ -1,0 +1,3 @@
+Consultorio Medico
+Lista duplamente ligada de Consultas
+Cada consulta tem uma lista duplamente ligada de medicamentos
