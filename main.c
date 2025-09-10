@@ -61,17 +61,6 @@ int main()
         printf("Nome não pode estar vazio!\n");
         break;
     }
-      // Pesquisa e retorna resultados
-      //List *search_results = search_by_patient(li, search_name);
-      // Printa resultados
-      //if (search_results != NULL) {
-        //display_search_results(search_results, search_name);
-        //free_list(search_results);
-      //}
-      //else
-      //{
-        //printf("Erro ao realizar a busca!\n");
-      //}
       search_and_display_by_patient(li, search_name);
       break;
     case 0:
