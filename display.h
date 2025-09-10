@@ -4,12 +4,13 @@
 
 void clear_input_buffer();
 void display_menu();
-void display_new_consultation(List *lista);
-void display_list_consultations_meds(List *lista);
-void display_list_consultations(List *lista);
-void display_add_medication(List *lista);
-void display_remove_consultation(List *lista);
-void display_remove_medication(List *lista);
-void display_statistics(List *lista);
+void display_new_consultation(List *li);
+void display_list_consultations_meds(List *li);
+void display_list_consultations(List *li);
+void display_add_medication(List *li);
+void display_remove_consultation(List *li);
+void display_remove_medication(List *li);
+void search_and_display_by_patient(List *li, const char *patient_name);
+void display_statistics(List *li);
 
 #endif

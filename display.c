@@ -15,51 +15,102 @@ void display_menu() {
   printf("4. Remover Consulta\n");
   printf("5. Remover Medicamento\n");
   printf("6. Estatísticas\n");
+  printf("7. Carregar um arquivo\n");
+  printf("8. Fazer busca por nome\n");
   printf("0. Sair\n");
   printf("Escolha uma opção: ");
 }
 
-void display_new_consultation(List *lista) {
+void display_new_consultation(List *li) {
   char patient[MAX], desc[MAX], time[MAX], med_name[MAX], med_use[MAX], med_time[MAX];
   printf("\n--- NOVA CONSULTA ---\n");
 
-  printf("Nome do paciente: ");
-  fgets(patient, MAX, stdin);
-  patient[strcspn(patient, "\n")] = '\0';
+  do {
+    printf("Nome do paciente: ");
+    if (fgets(patient, MAX, stdin) == NULL) {
+      printf("Erro na leitura!\n");
+      return;
+    }
+    patient[strcspn(patient, "\n")] = '\0';
 
-  printf("Descrição da consulta: ");
-  fgets(desc, MAX, stdin);
-  desc[strcspn(desc, "\n")] = '\0';
+    if (strlen(patient) == 0)
+      printf("É necessário informar nome do paciente!\n");
+  } while (strlen(patient) == 0);
 
-  printf("Horário da consulta: ");
-  fgets(time, MAX, stdin);
-  time[strcspn(time, "\n")] = '\0';
+  do {
+    printf("Descrição da consulta: ");
+    if (fgets(desc, MAX, stdin) == NULL) {
+      printf("Erro na leitura!\n");
+      return;
+    }
+    desc[strcspn(desc, "\n")] = '\0';
+
+    if (strlen(desc) == 0)
+      printf("É necessário informar a descrição da consulta!\n");
+  } while (strlen(desc) == 0);
+
+  do {
+    printf("Horário da consulta (formato: DD-MM-AAAA HH:MM): ");
+    if (fgets(time, MAX, stdin) == NULL) {
+      printf("Erro na leitura!\n");
+      return;
+    }
+    time[strcspn(time, "\n")] = '\0';
+
+    if (strlen(time) == 0) {
+      printf("É necessário informar o horário da consulta!\n");
+    }
+  } while (strlen(time) == 0);
 
   printf("Adicionar medicamento? (s/n): ");
   char opcao = getchar();
   clear_input_buffer();
 
   if (opcao == 's' || opcao == 'S') {
-    printf("Nome do medicamento: ");
-    fgets(med_name, MAX, stdin);
-    med_name[strcspn(med_name, "\n")] = '\0';
+    do {
+      printf("Nome do medicamento: ");
+      if (fgets(med_name, MAX, stdin) == NULL) {
+        printf("Erro na leitura!\n");
+        return;
+      }
+      med_name[strcspn(med_name, "\n")] = '\0';
 
-    printf("Quantidade do medicamento: ");
-    fgets(med_use, MAX, stdin);
-    med_use[strcspn(med_use, "\n")] = '\0';
+      if (strlen(med_name) == 0)
+        printf("É necessário informar o nome do medicamento!\n");
+    } while (strlen(med_name) == 0);
 
-    printf("Horário do medicamento: ");
-    fgets(med_time, MAX, stdin);
-    med_time[strcspn(med_time, "\n")] = '\0';
+    do {
+      printf("Dosagem do medicamento: ");
+      if (fgets(med_use, MAX, stdin) == NULL){
+        printf("Erro na leitura!\n");
+        return;
+      }
+      med_use[strcspn(med_use, "\n")] = '\0';
 
-    if (insert_consultation(lista, patient, desc, time, med_name, med_use, med_time)){
+      if (strlen(med_use) == 0)
+        printf("É necessário informar a dosagem!\n");
+    } while (strlen(med_use) == 0);
+
+    do {
+      printf("Horário do medicamento: ");
+      if (fgets(med_time, MAX, stdin) == NULL){
+        printf("Erro na leitura!\n");
+        return;
+      }
+      med_time[strcspn(med_time, "\n")] = '\0';
+
+      if (strlen(med_time) == 0)
+        printf("É necessário informar o horário do medicamento!\n");
+    } while (strlen(med_time) == 0);
+
+    if (insert_consultation(li, patient, desc, time, med_name, med_use, med_time)) {
       printf("Consulta criada com sucesso!\n");
     } else {
       printf("Erro ao criar consulta!\n");
     }
   } else {
     char empty[100] = "";
-    if (insert_consultation(lista, patient, desc, time, empty, empty, empty)) {
+    if (insert_consultation(li, patient, desc, time, empty, empty, empty)) {
       printf("Consulta criada com sucesso!\n");
     } else {
       printf("Erro ao criar consulta!\n");
@@ -67,10 +118,10 @@ void display_new_consultation(List *lista) {
   }
 }
 
-void display_list_consultations_meds(List *lista) {
+void display_list_consultations_meds(List *li) {
   printf("\n--- CONSULTAS DISPONÍVEIS ---\n");
 
-  int size = get_list_size(lista);
+  int size = get_list_size(li);
   if (size == 0) {
     printf("Nenhuma consulta cadastrada.\n");
     return;
@@ -78,15 +129,15 @@ void display_list_consultations_meds(List *lista) {
 
   for (int i = 0; i < size; i++) {
     char patient[MAX], desc[MAX], time[MAX];
-    get_consultation_info(lista, i, patient, desc, time);
+    get_consultation_info(li, i, patient, desc, time);
     printf("%d. %s - %s (%s)\n", i, patient, desc, time);
   }
 }
 
-void display_list_consultations(List *lista) {
+void display_list_consultations(List *li) {
   printf("\n--- LISTA COMPLETA DE CONSULTAS ---\n");
 
-  int size = get_list_size(lista);
+  int size = get_list_size(li);
   if (size == 0) {
     printf("Nenhuma consulta cadastrada.\n");
     return;
@@ -94,7 +145,7 @@ void display_list_consultations(List *lista) {
 
   for (int i = 0; i < size; i++) {
     char patient[MAX], desc[MAX], time[MAX];
-    if (get_consultation_info(lista, i, patient, desc, time) == 0) {
+    if (get_consultation_info(li, i, patient, desc, time) == 0) {
       printf("\n--- Consulta %d (Erro) ---\n", i + 1);
       printf("Erro ao carregar consulta %d\n", i + 1);
       continue;
@@ -105,14 +156,14 @@ void display_list_consultations(List *lista) {
     printf("Descrição: %s\n", desc);
     printf("Horário: %s\n", time);
 
-    int med_count = get_consultation_med_count(lista, i);
+    int med_count = get_consultation_med_count(li, i);
     if (med_count == 0) {
       printf("Medicamentos: Nenhum\n");
     } else {
       printf("Medicamentos:\n");
       for (int j = 0; j < med_count; j++) {
         char med_name[MAX], med_use[MAX], med_time[MAX];
-        if (get_medication_info(lista, i, j, med_name, med_use, med_time)) {
+        if (get_medication_info(li, i, j, med_name, med_use, med_time)) {
           printf("  %d. %s - %s (%s)\n", j + 1, med_name, med_use, med_time);
         } else {
           printf("  %d. %s\n", j + 1, med_name);
@@ -122,12 +173,12 @@ void display_list_consultations(List *lista) {
   }
 }
 
-void display_add_medication(List *lista) {
+void display_add_medication(List *li) {
   int consult_pos;
   char name[MAX], use[MAX], time[MAX];
 
   printf("\n--- ADICIONAR MEDICAMENTO ---\n");
-  display_list_consultations_meds(lista);
+  display_list_consultations_meds(li);
 
   printf("\nDigite o número da consulta: ");
   if (scanf("%d", &consult_pos) != 1)
@@ -150,17 +201,17 @@ void display_add_medication(List *lista) {
   fgets(time, MAX, stdin);
   time[strcspn(time, "\n")] = '\0';
 
-  if (insert_medication(lista, consult_pos, name, use, time)) {
+  if (insert_medication(li, consult_pos, name, use, time)) {
     printf("Medicamento adicionado com sucesso!\n");
   } else {
     printf("Erro ao adicionar medicamento!\n");
   }
 }
 
-void display_remove_consultation(List *lista) {
+void display_remove_consultation(List *li) {
   int pos;
   printf("\n--- REMOVER CONSULTA ---\n");
-  display_list_consultations_meds(lista);
+  display_list_consultations_meds(li);
   printf("\nDigite o número da consulta a remover: ");
   // verifica se realmente leu um número
   if (scanf("%d", &pos) != 1) { 
@@ -171,23 +222,23 @@ void display_remove_consultation(List *lista) {
   // Limpa caracteres extras da entrada
   clear_input_buffer(); 
 
-  if (pos < 0 || pos >= get_list_size(lista)) {
+  if (pos < 0 || pos >= get_list_size(li)) {
     printf("Consulta inválida!\n");
     return;
   }
 
-  if (remove_consultation(lista, pos)) {
+  if (remove_consultation(li, pos)) {
     printf("Consulta removida com sucesso!\n");
   } else {
     printf("Erro ao remover consulta!\n");
   }
 }
 
-void display_remove_medication(List *lista) {
+void display_remove_medication(List *li) {
   int consult_pos, med_pos;
 
   printf("\n--- REMOVER MEDICAMENTO ---\n");
-  display_list_consultations_meds(lista);
+  display_list_consultations_meds(li);
 
   printf("\nDigite o número da consulta: ");
   if (scanf("%d", &consult_pos) != 1) {
@@ -197,7 +248,7 @@ void display_remove_medication(List *lista) {
   }
 
   // Mostra medicamentos desta consulta
-  int med_count = get_consultation_med_count(lista, consult_pos);
+  int med_count = get_consultation_med_count(li, consult_pos);
   if (med_count == 0) {
     printf("Esta consulta não tem medicamentos.\n");
     clear_input_buffer();
@@ -207,7 +258,7 @@ void display_remove_medication(List *lista) {
   printf("Medicamentos da consulta %d:\n", consult_pos);
   for (int i = 0; i < med_count; i++) {
     char name[MAX], use[MAX], time[MAX];
-    get_medication_info(lista, consult_pos, i, name, use, time);
+    get_medication_info(li, consult_pos, i, name, use, time);
     printf("%d. %s\n", i, name);
   }
 
@@ -219,23 +270,23 @@ void display_remove_medication(List *lista) {
   }
   clear_input_buffer();
 
-  if (remove_medication(lista, consult_pos, med_pos)) {
+  if (remove_medication(li, consult_pos, med_pos)) {
     printf("Medicamento removido com sucesso!\n");
   } else {
     printf("Erro ao remover medicamento!\n");
   }
 }
 
-void display_statistics(List *lista) {
+void display_statistics(List *li) {
   printf("\n--- ESTATÍSTICAS ---\n");
-  printf("Total de consultas: %d\n", get_list_size(lista));
+  printf("Total de consultas: %d\n", get_list_size(li));
 
   int total_meds = 0;
   int max_meds = 0;
   int consult_com_mais_meds = -1;
 
-  for (int i = 0; i < get_list_size(lista); i++) {
-    int med_count = get_consultation_med_count(lista, i);
+  for (int i = 0; i < get_list_size(li); i++) {
+    int med_count = get_consultation_med_count(li, i);
     total_meds += med_count;
 
     if (med_count > max_meds) {
@@ -248,7 +299,59 @@ void display_statistics(List *lista) {
 
   if (consult_com_mais_meds != -1) {
     char patient[MAX], desc[MAX], time[MAX];
-    get_consultation_info(lista, consult_com_mais_meds, patient, desc, time);
+    get_consultation_info(li, consult_com_mais_meds, patient, desc, time);
     printf("Consulta com mais medicamentos: %s (%d medicamentos)\n", patient, max_meds);
   }
+}
+
+void search_and_display_by_patient(List *li, const char *patient_name) {
+    if (li == NULL || patient_name == NULL) {
+        printf("Parâmetros inválidos!\n");
+        return;
+    }
+
+    if (li->head == NULL) {
+        printf("Nenhuma consulta encontrada para: '%s'\n", patient_name);
+        return;
+    }
+
+    Consultation *current = li->head;
+    int found_count = 0;
+
+    printf("\n=== RESULTADOS DA BUSCA PARA: '%s' ===\n", patient_name);
+
+    while (current != NULL) {
+        if (strcasecmp(current->patient_name, patient_name) == 0) {
+            found_count++;
+            printf("\n--- Resultado %d ---\n", found_count);
+            printf("Paciente: %s\n", current->patient_name);
+            printf("Descrição: %s\n", current->description);
+            printf("Horário: %s\n", current->consultation_time);
+            
+            // Display medications from the consultation's own medication list
+            if (current->medications != NULL) {
+                printf("Medicamentos:\n");
+                Medication *med = current->medications;
+                int med_count = 1;
+                while (med != NULL) {
+                    printf("  %d. %s - %s (%s)\n", 
+                           med_count, med->name, med->use, med->time);
+                    med = med->next;
+                    med_count++;
+                }
+            } else {
+                printf("Medicamentos: Nenhum\n");
+            }
+            printf("----------------------------\n");
+        }
+        current = current->next;
+    }
+
+    if (found_count == 0) {
+        printf("Nenhuma consulta encontrada para: '%s'\n", patient_name);
+    } else {
+        printf("\nTotal encontrado: %d consulta(s)\n", found_count);
+    }
+    
+    printf("=== FIM DOS RESULTADOS ===\n");
 }

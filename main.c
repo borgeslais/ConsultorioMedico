@@ -11,9 +11,9 @@ int main()
     printf("Erro ao inicializar sistema!\n");
     return 1;
   }
-  load_consultations(li, "consultations.txt");
-
+  
   int option;
+
   printf("Bem-vindo ao Sistema de Gerenciamento de Consultas!\n");
   do {
     display_menu();
@@ -41,6 +41,38 @@ int main()
       break;
     case 6:
       display_statistics(li);
+      break;
+    case 7:
+      char *file_name = get_file_name();
+      if (file_name) {
+        load_consultations(li, file_name);
+        free(file_name);
+      }
+      break;
+    case 8:
+      char search_name[MAX];
+      printf("Digite o nome do paciente para buscar: ");
+      if (fgets(search_name, MAX, stdin) == NULL) {
+        printf("Erro na leitura do nome!\n");
+        break;
+      }
+      search_name[strcspn(search_name, "\n")] = '\0';
+      if (strlen(search_name) == 0) {
+        printf("Nome não pode estar vazio!\n");
+        break;
+    }
+      // Pesquisa e retorna resultados
+      //List *search_results = search_by_patient(li, search_name);
+      // Printa resultados
+      //if (search_results != NULL) {
+        //display_search_results(search_results, search_name);
+        //free_list(search_results);
+      //}
+      //else
+      //{
+        //printf("Erro ao realizar a busca!\n");
+      //}
+      search_and_display_by_patient(li, search_name);
       break;
     case 0:
       printf("Saindo do sistema...\n");

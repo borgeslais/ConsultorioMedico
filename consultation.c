@@ -3,7 +3,7 @@
 #include <string.h>
 #include "consultation.h"
 
-// Cria lista com nó auxiliar
+// Cria lista
 List *create_list() {
   List *li = (List *)malloc(sizeof(List));
   if (li != NULL) {
@@ -43,12 +43,6 @@ int insert_consultation(List *li, const char *patient, const char *description, 
   if (new_consult == NULL)
     return 0;
 
-  // Testa validade de todos os dados da consulta, se não providenciados, retorna erro
-  if (patient == NULL || strlen(patient) == 0 || description == NULL || strlen(description) == 0 || time == NULL || strlen(time) == 0) {
-    printf("Erro: todos os campos devem ser preenchidos!\n");
-    return 0;
-  }
-
   // Copia todos os dados da consulta
   strcpy(new_consult->patient_name, patient);
   strcpy(new_consult->description, description);
@@ -60,13 +54,12 @@ int insert_consultation(List *li, const char *patient, const char *description, 
   new_consult->prev = li->tail;
 
   // Valida e adiciona medicamento
-  if (med_name != NULL && strlen(med_name) > 0) {
+  if (med_name != NULL) { 
     Medication *new_med = (Medication *)malloc(sizeof(Medication));
     if (new_med == NULL) {
       free(new_consult);
       return 0;
     }
-
     // Copia todos os dados da medicação
     strcpy(new_med->name, med_name);
     strcpy(new_med->use, med_use);
@@ -85,14 +78,13 @@ int insert_consultation(List *li, const char *patient, const char *description, 
     li->tail->next = new_consult;
     li->tail = new_consult;
   }
-
   li->size++;
   return 1;
 }
 
 // Insere medicamento
 int insert_medication(List *li, int consult_pos, const char *name, const char *use, const char *time) {
-  if (li == NULL || li->head == NULL || consult_pos < 0 || consult_pos >= li->size)
+  if (li == NULL)
     return 0;
 
   Consultation *current_consult = li->head;
@@ -128,9 +120,29 @@ int insert_medication(List *li, int consult_pos, const char *name, const char *u
   return 1;
 }
 
+// Faz busca por paciente e retorna lista
+List* search_by_patient(List *li, const char *patient_name) {
+    if (li == NULL || patient_name == NULL)
+        return NULL;
+
+    List *results = create_list();
+    if (results == NULL)
+        return NULL;
+
+    Consultation *current = li->head;
+    int found_count = 0;
+    while (current != NULL) {
+        if (strcasecmp(current->patient_name, patient_name) == 0) {
+          insert_consultation_ptr(results, current);
+          found_count++;
+        }
+        current = current->next;
+    }
+    return results;
+}
+
 int remove_consultation(List *li, int pos) {
-  // Verificação inicial de parâmetros inválidos
-  if (li == NULL || li->head == NULL || pos < 0 || pos >= li->size)
+  if (li == NULL)
     return 0;
 
   // Navega até a consulta desejada
@@ -170,8 +182,7 @@ int remove_consultation(List *li, int pos) {
 }
 
 int remove_medication(List *li, int consult_pos, int med_pos) {
-  // Verificação inicial de parâmetros inválidos
-  if (li == NULL || li->head == NULL || consult_pos < 0 || consult_pos >= li->size)
+  if (li == NULL)
     return 0;
 
   // Navega até consulta desejada
@@ -224,15 +235,11 @@ int remove_medication(List *li, int consult_pos, int med_pos) {
 }
 
 // Mostra informações da consulta
-int get_consultation_info(List *li, int pos, char patient[MAX], char description[MAX], char time[MAX]){
-  if (li == NULL || li->head == NULL || pos < 0 || pos >= li->size) {
-    strcpy(patient, "ERRO: Lista inválida.");
-    strcpy(description, "ERRO: Lista inválida.");
-    strcpy(time, "ERRO: Lista inválida.");
+int get_consultation_info(List *li, int pos, char patient[MAX], char description[MAX], char time[MAX]) {
+  if (li == NULL)
     return 0;
-  }
 
-  Consultation *current = li->head;
+  Consultation *current = li->head;  
   int count = 0;
   while (count < pos) {
     current = current->next;
@@ -252,16 +259,12 @@ int get_list_size(List *li) {
 }
 
 int get_medication_info(List *li, int consult_pos, int med_pos, char name[MAX], char use[MAX], char time[MAX]) {
-  if (li == NULL || li->head == NULL || consult_pos < 0 || consult_pos >= li->size)
-  {
-    strcpy(name, "ERRO: Lista inválida.");
-    strcpy(use, "ERRO: Lista inválida.");
-    strcpy(time, "ERRO: Lista inválida.");
+  if (li == NULL)
     return 0;
-  }
 
   Consultation *current_consult = li->head;
   int count = 0;
+
   while (count < consult_pos) {
     current_consult = current_consult->next;
     count++;
@@ -274,21 +277,18 @@ int get_medication_info(List *li, int consult_pos, int med_pos, char name[MAX], 
     count++;
   }
 
-  if (current_med != NULL) {
+  if (current_med == NULL) {
+    return 0;
+  } else {
     strcpy(name, current_med->name);
     strcpy(use, current_med->use);
     strcpy(time, current_med->time);
     return 1;
-  } else {
-    strcpy(name, "ERRO: Medicamento não encontrado.");
-    strcpy(use, "ERRO: Medicamento não encontrado.");
-    strcpy(time, "ERRO: Medicamento não encontrado.");
-    return 0;
   }
 }
 
 int get_consultation_med_count(List *li, int pos) {
-  if (li == NULL || li->head == NULL || pos < 0 || pos >= li->size)
+  if (li == NULL)
     return 0;
 
   Consultation *current = li->head;
@@ -309,6 +309,15 @@ int get_consultation_med_count(List *li, int pos) {
   return med_count;
 }
 
+char* get_file_name() {
+    char *file_name = malloc(25 * sizeof(char));
+    if (!file_name) return NULL;
+    
+    printf("Digite o nome do arquivo que será carregado:\n");
+    scanf("%24s", file_name);
+    return file_name;
+}
+
 int load_consultations(List *li, const char *consultations_file) {
     if (li == NULL || consultations_file == NULL) return 0;
 
@@ -320,7 +329,7 @@ int load_consultations(List *li, const char *consultations_file) {
 
     char line[500];
     int consult_count = 0;
-    int current_consult_index = -1;
+    Consultation *current_consultation = NULL; 
     int expect_consultation = 1; // 1 = espera consulta, 0 = espera medicamentos
 
     while (fgets(line, sizeof(line), file) != NULL) {
@@ -333,23 +342,28 @@ int load_consultations(List *li, const char *consultations_file) {
         // Linha em branco = nova consulta
         if (len == 0) {
             expect_consultation = 1;
+            // Reseta
+            current_consultation = NULL;
             continue;
         }
 
-        // Lê os três campos
+        // Lê os três campos: nome do paciente, descrição e data
         char field1[MAX], field2[MAX], field3[MAX];
         if (sscanf(trimmed, "%[^;];%[^;];%[^\n]", field1, field2, field3) == 3) {
           if (expect_consultation) {
-            // É uma nova consulta
-            if (insert_consultation(li, field1, field2, field3, "", "", "")) {
-              current_consult_index = consult_count;
+            // Adiciona nova consulta
+            if (insert_consultation(li, field1, field2, field3, NULL, NULL, NULL)) {
+              current_consultation = li->tail; 
               consult_count++;
               expect_consultation = 0; // Agora espera medicamentos
             }
           } else {
             // É um medicamento para a consulta atual
-            if (current_consult_index >= 0) {
-              insert_medication(li, current_consult_index, field1, field2, field3);
+            if (current_consultation != NULL) {
+              if (strlen(field1) > 0 && strlen(field2) > 0 && strlen(field3) > 0){
+                // Insere nome do medicamento, dosagem e hora
+                insert_medication_to_consultation(current_consultation, field1, field2, field3);
+              }
             }
           }
         }
@@ -358,4 +372,61 @@ int load_consultations(List *li, const char *consultations_file) {
     fclose(file);
     printf("Carregadas %d consultas do arquivo %s\n", consult_count, consultations_file);
     return consult_count;
+}
+
+// Função auxiliar
+int insert_consultation_ptr(List *li, Consultation *consult_ptr) {
+    if (li == NULL || consult_ptr == NULL) return 0;
+    
+    Consultation *new_node = (Consultation*)malloc(sizeof(Consultation));
+    if (new_node == NULL) return 0;
+    
+    strncpy(new_node->patient_name, consult_ptr->patient_name, MAX);
+    strncpy(new_node->description, consult_ptr->description, MAX);
+    strncpy(new_node->consultation_time, consult_ptr->consultation_time, MAX);
+    
+    new_node->medications = consult_ptr->medications;
+    
+    new_node->next = NULL;
+    new_node->prev = NULL;
+    
+    if (li->tail == NULL) {
+        li->head = new_node;
+        li->tail = new_node;
+    } else {
+        li->tail->next = new_node;
+        new_node->prev = li->tail;
+        li->tail = new_node;
+    }
+    
+    li->size++;
+    return 1;
+}
+
+// Função auxiliar
+int insert_medication_to_consultation(Consultation *consult, const char *name, const char *use, const char *time) {
+    if (consult == NULL) return 0;
+    
+    Medication *new_med = (Medication*)malloc(sizeof(Medication));
+    if (new_med == NULL) return 0;
+    
+    strncpy(new_med->name, name, MAX);
+    strncpy(new_med->use, use, MAX);
+    strncpy(new_med->time, time, MAX);
+    new_med->next = NULL;
+    new_med->prev = NULL;
+    
+    // Adiciona no final da lista de medicamentos
+    if (consult->medications == NULL) {
+        consult->medications = new_med;
+    } else {
+        Medication *last = consult->medications;
+        while (last->next != NULL) {
+            last = last->next;
+        }
+        last->next = new_med;
+        new_med->prev = last;
+    }
+    
+    return 1;
 }
